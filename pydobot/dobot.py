@@ -19,6 +19,7 @@ MODE_PTP_MOVJ_INC = 0x06
 MODE_PTP_MOVL_INC = 0x07
 MODE_PTP_MOVJ_XYZ_INC = 0x08
 MODE_PTP_JUMP_MOVL_XYZ = 0x09
+IO_MODES = {'Dummy': 1, 'PWM': 2, 'DO': 3, 'DI': 4, 'ADC': 5}
 
 STEP_PER_CIRCLE = 360.0 / 1.8 * 10.0 * 16.0
 MM_PER_CIRCLE = 3.1415926535898 * 36.0
@@ -240,6 +241,14 @@ class Dobot:
         msg.id = 110
         msg.ctrl = 0x03
         msg.params = bytearray(struct.pack('I', ms))
+        return self._send_command(msg)
+
+    def _set_io_multiplexing(self, address, mode):
+        msg = Message()
+        msg.id = 130
+        msg.ctrl = 0x03
+        msg.params = bytearray(struct.pack('B', address))
+        msg.params.extend(bytearray(struct.pack('B', mode)))
         return self._send_command(msg)
 
     def _set_queued_cmd_start_exec(self):
@@ -502,6 +511,9 @@ class Dobot:
 
     def wait(self, ms):
         self._set_wait_cmd(ms)
+
+    def set_io_mode(self, address, mode, wait=False):
+        self._set_io_multiplexing(address, IO_MODES[mode], wait)
 
 
 if __name__ == '__main__':
