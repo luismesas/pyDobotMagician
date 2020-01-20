@@ -251,6 +251,15 @@ class Dobot:
         msg.params.extend(bytearray(struct.pack('B', mode)))
         return self._send_command(msg)
 
+    def _set_io_pwm(self, address, f, d):
+        msg = Message()
+        msg.id = 132
+        msg.ctrl = 0x03
+        msg.params = bytearray(struct.pack('B', address))
+        msg.params.extend(bytearray(struct.pack('f', f)))
+        msg.params.extend(bytearray(struct.pack('f', d)))
+        return self._send_command(msg)
+
     def _set_queued_cmd_start_exec(self):
         msg = Message()
         msg.id = 240
@@ -512,8 +521,11 @@ class Dobot:
     def wait(self, ms):
         self._set_wait_cmd(ms)
 
-    def set_io_mode(self, address, mode, wait=False):
-        self._set_io_multiplexing(address, IO_MODES[mode], wait)
+    def set_io_mode(self, address, mode):
+        self._set_io_multiplexing(address, IO_MODES[mode])
+
+    def set_pwm_output(self, address, frequency, duty_cycle):
+        self._set_io_pwm(address, frequency, duty_cycle)
 
 
 if __name__ == '__main__':
