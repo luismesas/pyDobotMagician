@@ -235,6 +235,13 @@ class Dobot:
         msg.params.extend(bytearray([power]))
         return self._send_command(msg)
 
+    def _set_wait_cmd(self, ms):
+        msg = Message()
+        msg.id = 110
+        msg.ctrl = 0x03
+        msg.params = bytearray(struct.pack('I', ms))
+        return self._send_command(msg)
+
     def _set_queued_cmd_start_exec(self):
         msg = Message()
         msg.id = 240
@@ -492,6 +499,9 @@ class Dobot:
                     self.wait_for_cmd(indexes.popleft())
 
         self.wait_for_cmd(self.laze(0, False))
+
+    def wait(self, ms):
+        self._set_wait_cmd(ms)
 
 
 if __name__ == '__main__':
