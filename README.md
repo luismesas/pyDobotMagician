@@ -64,3 +64,15 @@ Methods
     * **enable**: _bool_ enables/disables suction
 * **.grip(enable)**
     * **enable**: _bool_ enables/disables gripper
+* **.wait(ms)**
+    * **ms**: _integer_ milliseconds to wait before the next command
+    * **wait**: _bool_ waits until command has been executed to return to process
+* **.set_io_mode(address, mode, wait=False)**
+    * **address**: _integer_ EIO port number
+    * **mode**: _str_ I/O mode (Dummy, PWM, DO, DI, ADC)
+    * **wait**: _bool_ waits until command has been executed to return to process
+* **.set_pwm_output(address, frequency, duty_cycle, wait=False)**
+    * **address**: _integer_ EIO port number
+    * **frequency**: _float_ pulse frequency
+    * **duty_cycle**: _float_ pulse duty cycle (0 to 100)
+    * **wait**: _bool_ waits until command has been executed to return to process
