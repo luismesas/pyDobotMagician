@@ -105,7 +105,7 @@ class Dobot:
                 b.extend(payload_checksum)
                 msg = Message(b)
                 if self.verbose:
-                    print('Lenght', payload_length)
+                    print('Length', payload_length)
                     print(payload_checksum)
                     print('MessageID:', payload_checksum[0])
                     print('pydobot: <<', ":".join('{:02x}'.format(x) for x in b))
