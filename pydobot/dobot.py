@@ -4,11 +4,8 @@ import time
 import threading
 import warnings
 
-from message import Message
-from enums.PTPMode import PTPMode
-from enums.CommunicationProtocolIDs import CommunicationProtocolIDs
-from enums.ControlValues import ControlValues
-
+from .message import Message
+from .enums import PTPMode, CommunicationProtocolIDs, ControlValues
 
 class Dobot:
 
