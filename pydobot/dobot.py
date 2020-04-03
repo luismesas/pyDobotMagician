@@ -5,7 +5,7 @@ import threading
 import warnings
 
 from .message import Message
-from .enums import PTPMode, CommunicationProtocolIDs, ControlValues
+from .enums import ControlValues, PTPMode, CommunicationProtocolIDs
 
 class Dobot:
 
@@ -221,7 +221,7 @@ class Dobot:
         msg.id = CommunicationProtocolIDs.SET_PTP_CMD
         msg.ctrl = ControlValues.THREE
         msg.params = bytearray([])
-        msg.params.extend(bytearray([mode]))
+        msg.params.extend(bytearray([mode.value]))
         msg.params.extend(bytearray(struct.pack('f', x)))
         msg.params.extend(bytearray(struct.pack('f', y)))
         msg.params.extend(bytearray(struct.pack('f', z)))
