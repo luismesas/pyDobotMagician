@@ -4,11 +4,8 @@ import time
 import threading
 import warnings
 
-from message import Message
-from enums.PTPMode import PTPMode
-from enums.CommunicationProtocolIDs import CommunicationProtocolIDs
-from enums.ControlValues import ControlValues
-
+from .message import Message
+from .enums import ControlValues, PTPMode, CommunicationProtocolIDs
 
 class Dobot:
 
@@ -73,14 +70,15 @@ class Dobot:
                   (self.x, self.y, self.z, self.r, self.j1, self.j2, self.j3, self.j4))
         return response
 
-    def _read_message(self):
-        time.sleep(0.1)
-        b = self.ser.read_all()
-        if len(b) > 0:
-            msg = Message(b)
-            if self.verbose:
-                print('pydobot: <<', msg)
-            return msg
+    def _read_message(self,retries=5):
+        for x in range(retries):
+            time.sleep(0.1)
+            b = self.ser.read_all()
+            if len(b) > 0:
+                msg = Message(b)
+                if self.verbose:
+                    print('pydobot: <<', msg)
+                return msg
         return
 
     def _send_command(self, msg, wait=False):
@@ -224,7 +222,7 @@ class Dobot:
         msg.id = CommunicationProtocolIDs.SET_PTP_CMD
         msg.ctrl = ControlValues.THREE
         msg.params = bytearray([])
-        msg.params.extend(bytearray([mode]))
+        msg.params.extend(bytearray([mode.value]))
         msg.params.extend(bytearray(struct.pack('f', x)))
         msg.params.extend(bytearray(struct.pack('f', y)))
         msg.params.extend(bytearray(struct.pack('f', z)))
@@ -257,6 +255,15 @@ class Dobot:
         msg.id = CommunicationProtocolIDs.SET_QUEUED_CMD_STOP_EXEC
         msg.ctrl = ControlValues.ONE
         return self._send_command(msg)
+
+    """
+        Home command
+    """
+    def _set_home_cmd(self):
+        msg = Message()
+        msg.id = CommunicationProtocolIDs.SET_HOME_CMD
+        msg.ctrl = ControlValues.THREE
+        return self._send_command(msg, wait=True)
 
     def close(self):
         self._on = False
@@ -294,3 +301,6 @@ class Dobot:
         j3 = struct.unpack_from('f', response.params, 24)[0]
         j4 = struct.unpack_from('f', response.params, 28)[0]
         return x, y, z, r, j1, j2, j3, j4
+
+    def home(self):
+        self._set_home_cmd()
