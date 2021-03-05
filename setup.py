@@ -6,7 +6,7 @@ with open("README.md", "r") as fh:
 setuptools.setup(
     name='pydobot',
     packages=['pydobot','pydobot.enums'],
-    version='1.3.1',
+    version='1.3.2',
     description='Python library for Dobot Magician',
     long_description=long_description,
     long_description_content_type='text/markdown',
