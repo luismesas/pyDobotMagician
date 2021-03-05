@@ -250,6 +250,16 @@ class Dobot:
         return self._send_command(msg)
 
     """
+        Wait command
+    """
+    def _set_wait_cmd(self, ms):
+        msg = Message()
+        msg.id = 110
+        msg.ctrl = 0x03
+        msg.params = bytearray(struct.pack('I', ms))
+        return self._send_command(msg)
+
+    """
         Stop command
     """
     def _set_queued_cmd_stop_exec(self):
@@ -305,6 +315,9 @@ class Dobot:
     def speed(self, velocity=100., acceleration=100.):
         self._set_ptp_common_params(velocity, acceleration)
         self._set_ptp_coordinate_params(velocity, acceleration)
+
+    def wait(self, ms):
+        self._set_wait_cmd(ms)
 
     def pose(self):
         response = self._get_pose()

@@ -67,3 +67,5 @@ Methods
     * **enable**: _bool_ enables/disables suction
 * **.grip(enable)**
     * **enable**: _bool_ enables/disables gripper
+* **.wait(ms)** adds a waiting period to the internal queue of messages
+    * **ms**: _int_ number of milliseconds to wait
