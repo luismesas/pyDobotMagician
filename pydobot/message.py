@@ -25,6 +25,8 @@ class Message:
         return ret.upper()
 
     def refresh(self):
+        self.ctrl = self.ctrl.value if type(self.ctrl) != type(0) else self.ctrl
+        self.id = self.id.value if type(self.id) != type(0) else self.id
         if self.checksum is None:
             self.checksum = self.id + self.ctrl
             for i in range(len(self.params)):
@@ -34,7 +36,7 @@ class Message:
                     self.checksum += int(self.params[i].encode('hex'), 16)
             self.checksum = self.checksum % 256
             self.checksum = 2 ** 8 - self.checksum
-            self.checksum = self.checksum % 256
+            self.checksum = self.checksum % 255 # TODO verify this
             self.len = 0x02 + len(self.params)
 
     def bytes(self):
